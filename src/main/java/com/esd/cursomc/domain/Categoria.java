@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 public class Categoria implements Serializable {
 
@@ -21,8 +19,7 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY) //geração de chave primária baseada no Identity, funciona com a maioria dos bancos de dados
 	private Integer id;
 	private String nome;
-	
-	@JsonManagedReference
+		
 	@ManyToMany(mappedBy = "categorias") //categorias é o atributo em que foi mapeado em Produtos
 	private List<Produto> produtos = new ArrayList<>();
 	

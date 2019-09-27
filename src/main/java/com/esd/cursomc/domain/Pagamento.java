@@ -11,7 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.esd.cursomc.domain.enums.EstadoPagamento;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) //mapear herança pode fazer um tabelão(ou single table bom quando as subclasses tem poucos atributos) ou tabelas independentes(ou joined para subclasses com muitos atributos é o ideal)
@@ -24,7 +24,7 @@ public abstract class Pagamento implements Serializable {
 	//private EstadoPagamento estado;
 	private Integer estado;
 
-	@JsonBackReference
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="pedido_id")
 	@MapsId //para garantir que seja o mesmo id do pedido
