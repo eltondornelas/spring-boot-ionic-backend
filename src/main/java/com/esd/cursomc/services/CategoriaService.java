@@ -3,10 +3,12 @@ package com.esd.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.esd.cursomc.domain.Categoria;
 import com.esd.cursomc.repositories.CategoriaRepository;
+import com.esd.cursomc.services.exceptions.DataIntegrityException;
 import com.esd.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -27,8 +29,19 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		find(obj.getId());
+		find(obj.getId());  //caso não exista já dispara a exceção
 		return repo.save(obj);
 		//o .save serve tanto para inserir novo como para atualizar, o que diferencia é que o id tem que estar nulo para ser inserção.
+	}
+	
+	public void delete(Integer id) {
+		find(id); //caso não exista já dispara a exceção
+		try {
+			repo.deleteById(id);
+		}
+		catch (DataIntegrityViolationException e) { 
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos!");
+		}
+		
 	}
 }
