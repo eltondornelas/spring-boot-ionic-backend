@@ -1,6 +1,5 @@
 package com.esd.cursomc.services;
 
-import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.esd.cursomc.domain.Cliente;
 import com.esd.cursomc.domain.Cliente;
 import com.esd.cursomc.dto.ClienteDTO;
 import com.esd.cursomc.repositories.ClienteRepository;
