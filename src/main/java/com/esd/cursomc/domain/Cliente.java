@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class Cliente implements Serializable {
 	private String cpfOuCnpj;
 	private Integer tipo; //não vai ser do tipo TipoCliente pro mundo externo...
 		
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "cliente", cascade=CascadeType.ALL) //esse comando em cascada por estar em ALL, quer dizer que toda ação referente a Cliente, vai refletir também na lista de endereço. Se deletar um cliente delta os enderecos...
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection
