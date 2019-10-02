@@ -1,11 +1,17 @@
 package com.esd.cursomc.resources;
 
+import java.net.URI;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.esd.cursomc.domain.Pedido;
 import com.esd.cursomc.services.PedidoService;
@@ -30,5 +36,14 @@ public class PedidoResource {
 		//nessa aula 14, vamos criar manualmente o banco de dados no H2
 	}
 	
-	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj) {
+		//não faremos Pedido com DTO, por conta de ter muitas informações nessa classe, teria que ser um DTO muito grande
+				
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
+				buildAndExpand(obj.getId()).toUri();
+		
+		return ResponseEntity.created(uri).build();
+	}
 }

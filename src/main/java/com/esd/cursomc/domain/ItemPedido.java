@@ -50,11 +50,19 @@ public class ItemPedido implements Serializable {
 		return id.getPedido();
 	}
 	
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}	
+	
 	//@JsonIgnore incluímos mas depois tiramos para que ele possa aparacer no item do pedido no Postman
 	public Produto getProduto() {
 		return id.getProduto();
 	}
 	//é interessante ter os gets desses dois itens para que não tenha a necessidade de entrar primeiro no PK para obter esses dados
+	
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
 	
 	public ItemPedidoPK getId() {
 		return id;
