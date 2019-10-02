@@ -46,6 +46,7 @@ public class CategoriaService {
 		}
 		catch (DataIntegrityViolationException e) { 
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos!");
+			//Data Integrity é uma excessão dada pelo Spring Data, que vem do banco de dados.
 		}
 		
 	}
