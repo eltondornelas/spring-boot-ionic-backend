@@ -31,8 +31,8 @@ public class ItemPedidoPK implements Serializable {
 	public Produto getProduto() {
 		return produto;
 	}
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	public void setProduto(Produto p1) {
+		this.produto = p1;
 	}
 	@Override
 	public int hashCode() {

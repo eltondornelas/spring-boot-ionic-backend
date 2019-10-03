@@ -35,6 +35,9 @@ public class PedidoService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 
 	public Pedido find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
@@ -46,6 +49,7 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj); //associação de mão dupla
 		
@@ -62,11 +66,13 @@ public class PedidoService {
 			ip.setDesconto(0.0);
 			//ip.setPreco(produtoRepository.findById(ip.getProduto().getId()).getPreco());
 			Optional<Produto> p = produtoService.find(ip.getProduto().getId());
+			ip.setProduto(p.get());
 			ip.setPreco(p.get().getPreco());
 			ip.setPedido(obj);
 		}
 		
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);		
 		return obj;
 	}
 
