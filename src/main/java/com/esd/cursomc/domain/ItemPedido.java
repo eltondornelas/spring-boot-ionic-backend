@@ -3,7 +3,6 @@ package com.esd.cursomc.domain;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
