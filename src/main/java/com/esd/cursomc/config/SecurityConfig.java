@@ -49,8 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}; //esse caminho com GET é apenas para Leitura, não pode ser modificado
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/clientes",
-			"/clientes/picture",
+			"/clientes",			
 			"/auth/forgot/**"
 	}; //Essa liberação é devido que o Cliente que ainda não existe ele pode se cadastrar
 	
