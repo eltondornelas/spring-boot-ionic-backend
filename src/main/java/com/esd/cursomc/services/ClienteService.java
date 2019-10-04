@@ -48,6 +48,9 @@ public class ClienteService {
 	
 	@Autowired
 	private ImageService imageService;
+	
+	@Value("${img.profile.size}")
+	private Integer size;
 
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
@@ -139,10 +142,14 @@ public class ClienteService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
+		
 		String fileName = prefix + user.getId() + ".jpg";
 		//montando o nomne personalizado. esse prefix é o que colocamos la no application properties: "cp"
 		//a partir de agora ficará salvo na nuvem desta forma e gerará a url com esse nome no final
 		//cp = client profile (perfil do cliente)
+		
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");		
 		//vai ficar salvo no DB do cliente a url da imagem gerada. 
 
