@@ -1,5 +1,6 @@
 package com.esd.cursomc.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +45,12 @@ public class ClienteService {
 
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
 
 	public Cliente find(Integer id) {
 
@@ -129,14 +137,14 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 			//não tem ninguém logado, por isso nega
 		}
+		
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		String fileName = prefix + user.getId() + ".jpg";
+		//montando o nomne personalizado. esse prefix é o que colocamos la no application properties: "cp"
+		//a partir de agora ficará salvo na nuvem desta forma e gerará a url com esse nome no final
+		//cp = client profile (perfil do cliente)
+		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");		
+		//vai ficar salvo no DB do cliente a url da imagem gerada. 
 
-		URI uri = s3Service.uploadFile(multipartFile);
-
-		Cliente cli = find(user.getId());
-		cli.setImageUrl(uri.toString());
-		repo.save(cli);
-		//como criamos o atributo de receber essa imagem, vai ficar salvo no DB do cliente a url da imagem gerada. 
-
-		return uri;
 	}
 }
