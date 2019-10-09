@@ -22,6 +22,10 @@ import com.esd.cursomc.domain.Categoria;
 import com.esd.cursomc.dto.CategoriaDTO;
 import com.esd.cursomc.services.CategoriaService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 //Resource (recurso) é o nome padrão para os controladores REST, vem após o nome da classe domínio
 
 @RestController
@@ -31,6 +35,7 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService service;
 	
+	@ApiOperation(value="Busca por id")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET) //atribuindo verbo HTTP "get"
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) { //o PathVariable diz que o {id} da URL vai para o id da função
 		//Response Entity é um tipo especial do Spring que já armazena várias informações de uma resposta HTTP para um serviço REST
@@ -43,6 +48,7 @@ public class CategoriaResource {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value="Insere categoria")
 	@RequestMapping(method = RequestMethod.POST) //POST para inserir novo
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {
 		Categoria obj = service.fromDTO(objDto);
@@ -54,6 +60,7 @@ public class CategoriaResource {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value="Atualiza categoria")
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT) //PUT para atualizar
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = service.fromDTO(objDto);
@@ -64,12 +71,17 @@ public class CategoriaResource {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@ApiOperation(value="Remove categoria")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Não é possível excluir uma categoria que possui produtos"),
+			@ApiResponse(code = 404, message = "Código inexistente") })
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE) //atribuindo verbo HTTP "get"
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation(value="Retorna todas categorias")
 	@RequestMapping(method=RequestMethod.GET) //como queremos que ele list todas as categorias, não vamos colocar o value id
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 				
@@ -82,6 +94,7 @@ public class CategoriaResource {
 		//Aula 34 bem importante sobre isso.
 	}
 	
+	@ApiOperation(value="Retorna todas categorias com paginação")
 	@RequestMapping(value = "/page", method=RequestMethod.GET) //concatena o /page com o /categoria lá em cima da classe
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(value="page", defaultValue = "0") Integer page,
